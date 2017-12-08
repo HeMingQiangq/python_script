@@ -1,0 +1,6 @@
+        release {
+            keyAlias 'JDBClient'
+            keyPassword 'JDrenrenxing007'
+            storeFile file('../script/Build/module/renrenxing.keystore')
+            storePassword 'JDrenrenxing007'
+        }

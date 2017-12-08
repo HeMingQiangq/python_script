@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JDBClient" default="release">		
+	<property environment="env" />
+	<property name="source.dir" value="SRC_DIR" />
+	<property name="sdk.dir" value="SDK_PATH"/>
+	<property name="java.encoding" value="UTF-8" />
+	<property file="ant.properties" />
+    <loadproperties srcFile="project.properties" />
+	<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/> 
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+	<target name="build-release" depends="release" >
+	</target>
+	<target name="build-debug" depends="debug" >
+	</target>
+</project>

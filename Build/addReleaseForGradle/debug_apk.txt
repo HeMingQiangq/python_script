@@ -1,0 +1,9 @@
+            applicationIdSuffix '.dev'
+
+            minifyEnabled true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            signingConfig  signingConfigs.release
+            applicationVariants.all { variant ->
+                appendVersionName(variant, defaultConfig)
+            }

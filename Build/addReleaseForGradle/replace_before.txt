@@ -1,0 +1,7 @@
+    buildTypes {
+            applicationVariants.all { variant ->
+//            applicationIdSuffix '.debug'
+dependencies {
+            minifyEnabled true
+        dev {
+    signingConfigs {

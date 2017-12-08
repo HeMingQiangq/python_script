@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FindBugsFilter>
+     <Match>
+          <Class name="~.*\.R\$.*"/>
+          </Match>
+    <Match>
+        <Class name="~.*\.Manifest\$.*"/>
+    </Match>
+    <Match>
+        <Package name="~android\.support\.v7.*" />
+    </Match>
+	<!--<Match>
+
+        <Bug category="PERFORMANCE" />
+
+    </Match>-->
+    <Match>
+        <Bug pattern="DM_DEFAULT_ENCODING" />
+    </Match>
+	<Match>
+        <Bug pattern="DM_GC" />
+    </Match>
+	<Match>
+        <Class name="com.rrh.jdb.hybrid.plugin.device.Device"/>
+        <Method name="initialize"/>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+        <!--<Bug pattern="ST"/>-->
+    </Match>
+    <Match>
+        <Class name="com.rrh.jdb.service.downloadcore.RNSubpackageUtils"/>
+        <Method name="RNSubpackageUtils"/>
+        <Bug pattern="MS_MUTABLE_COLLECTION"/>
+    </Match>
+    <Match>
+        <Class name="com.rrh.jdb.service.downloadcore.RNSubpackageUtils"/>
+        <!--<Method name="RNSubpackageUtils"/>-->
+        <Bug pattern="MS_SHOULD_BE_FINAL"/>
+    </Match>
+    <Match>
+        <Class name="com.rrh.jdb.routerstrategy.routercore.RouteNative$RouteNativeMap"/>
+        <BugCode  name="MS" />
+        <Bug pattern="MS_MUTABLE_COLLECTION"/>
+    </Match>
+    <!--<Match>-->
+        <!--<Class name="com.rrh.jdb.routerstrategy.routercore.RouteNative.RouteNativeMap"/>-->
+        <!--<BugCode  name="MS" />-->
+        <!--<Bug pattern="MS_MUTABLE_COLLECTION"/>-->
+    <!--</Match>-->
+    <Match>
+        <Class name="~.*/.RouteNative"/>
+        <!--<Bug pattern="MS_SHOULD_BE_FINAL"/>-->
+        <BugCode  name="MS" />
+        <Bug category="MALICIOUS_CODE" />
+    </Match>
+    <Match>
+        <Class name="com.rrh.jdb.modules.vercode.VerificationCodeView"/>
+        <Method name="resetCountDownTime"/>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    </Match>
+    <Match>
+        <Class name="com.rrh.jdb.service.downloadcore.UpdateRNSubpackage"/>
+        <Method name="downloadFileList"/>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    </Match>
+    <Match>
+        <Class name="com.rrh.jdb.util.app.NBEnterHelper"/>
+        <Method name="matchRule"/>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    </Match>
+</FindBugsFilter>
