@@ -1,0 +1,239 @@
+apply plugin: 'com.android.application'
+apply plugin: 'bonree'
+apply plugin: 'dexknifePlus'
+
+android {
+
+    compileSdkVersion 23
+    buildToolsVersion '23.0.1'
+    defaultConfig {
+        applicationId "com.rrh.jdb"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 292
+        versionName "2.9.2"
+        multiDexEnabled true
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+        renderscriptTargetApi 18
+        renderscriptSupportModeEnabled true
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("jdbDebug.keystore")
+            storePassword "123456"
+            keyAlias "jdb.debug"
+            keyPassword "123456"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+
+            manifestPlaceholders = [MIPUSH_RECEIVE_PERMISSION: "com.rrh.jdb.permission.MIPUSH_RECEIVE",
+                                    UMENG_APPKEY             : "55640d9d67e58eb2ae0010a7",
+                                    UMENG_MESSAGE_SECRET     : "b576889aba117b78e195e1eeca0adc0b",
+                                    XIAOMI_PUSH_APPID        : "2882303761517443061",
+                                    XIAOMI_PUSH_APPKEY       : "5531744365061",
+                                    HUAWEI_PUSH_APPID        : "10295534",
+                                    HUAWEI_PUSH_APPKEY       : "u6s5tv0jbyh99hguue97f5ppvstry7kw"]
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            zipAlignEnabled true
+            applicationVariants.all { variant ->
+                appendVersionName(variant, defaultConfig)
+            }
+            // BuildConfig自定义字段
+            buildConfigField 'boolean','IS_SHOW_LOAD_TYPE_DIALOG', "false"
+            buildConfigField 'boolean','IS_CONTAIN_BONREE', "true"
+        }
+        //开发者本地默认的版本  包名为"com.rrh.jdb.debug"  应用名为"借贷宝debug"
+        debug {
+            manifestPlaceholders = [UMENG_APPKEY             : "55640d9d67e58eb2ae0010a7",
+                                    UMENG_MESSAGE_SECRET     : "b576889aba117b78e195e1eeca0adc0b",
+                                    MIPUSH_RECEIVE_PERMISSION: "com.rrh.jdb.debug.permission.MIPUSH_RECEIVE",
+                                    XIAOMI_PUSH_APPID        : "2882303761517443061",
+                                    XIAOMI_PUSH_APPKEY       : "5531744365061",
+                                    HUAWEI_PUSH_APPID        : "10295534",
+                                    HUAWEI_PUSH_APPKEY       : "u6s5tv0jbyh99hguue97f5ppvstry7kw"]
+            applicationIdSuffix '.debug'
+            //开启代码混淆
+            minifyEnabled false
+            // 移除无用的resource文件
+//            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            // BuildConfig自定义字段
+            buildConfigField 'boolean','IS_SHOW_LOAD_TYPE_DIALOG', "true"
+            buildConfigField 'boolean','IS_CONTAIN_BONREE', "true"
+        }
+        //开发者本地默认的版本  包名为"com.rrh.jdb.dev"  应用名为"借贷宝dev"
+        dev {
+            manifestPlaceholders = [UMENG_APPKEY             : "55640d9d67e58eb2ae0010a7",
+                                    UMENG_MESSAGE_SECRET     : "b576889aba117b78e195e1eeca0adc0b",
+                                    MIPUSH_RECEIVE_PERMISSION: "com.rrh.jdb.dev.permission.MIPUSH_RECEIVE",
+                                    XIAOMI_PUSH_APPID        : "2882303761517443061",
+                                    XIAOMI_PUSH_APPKEY       : "5531744365061",
+                                    HUAWEI_PUSH_APPID        : "10295534",
+                                    HUAWEI_PUSH_APPKEY       : "u6s5tv0jbyh99hguue97f5ppvstry7kw"]
+            applicationIdSuffix '.dev'
+            //开启代码混淆
+            minifyEnabled true
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            // shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            // BuildConfig自定义字段
+            buildConfigField 'boolean','IS_SHOW_LOAD_TYPE_DIALOG', "false"
+            buildConfigField 'boolean','IS_CONTAIN_BONREE', "true"
+        }
+    }
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+    useLibrary 'org.apache.http.legacy'
+    lintOptions {
+        abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+def appendVersionName(variant, defaultConfig) {
+    variant.outputs.each { output ->
+        if (output.zipAlign) {
+            def file = output.outputFile
+            def fileName = file.name.replace(".apk", "-v" + defaultConfig.versionName + ".apk")
+            output.outputFile = new File(file.parent, fileName)
+        }
+
+        def file = output.packageApplication.outputFile
+        def fileName = file.name.replace(".apk", "-v" + defaultConfig.versionName + ".apk")
+        output.packageApplication.outputFile = new File(file.parent, fileName)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://github.com/500px/500px-android-blur/raw/master/releases/'
+    }
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // replace with the current version of the Android plugin
+        classpath 'com.android.tools.build:gradle:2.0.0'
+        // the latest version of the android-apt plugin
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.antfortune.freeline'
+
+dependencies {
+    //    compile fileTree(dir: 'libs',includes: ['*.jar'])
+    compile project(':debugTool')
+//    compile project(':betaTool')
+    compile project(':common_rrx')
+    compile project(':common_jdb')
+    compile project(':lib_jdblog')
+    compile project(':lib_jdblogimpl2')
+    compile project(':lib_imageloader')
+    compile project(':lib_cordova')
+    compile project(':lib_rn')
+    compile files('libs/jna-min.jar')
+    compile files('libs/liveness.jar')
+    compile files('libs/libammsdk.jar')
+    compile files('libs/open_sdk_r5756_lite.jar')
+    compile files('libs/weiboSDKCore_3.1.4.jar')
+    compile files('libs/zbar_core.jar')
+    compile files('libs/AMap_Location_V3.3.0_20170118.jar')
+    compile 'com.android.support:multidex:+'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.17'
+    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+    compile project(':lib_ptr')
+    compile 'com.fivehundredpx:blurringview:1.0.0'
+    compile files('libs/mta-sdk-1.6.2.jar')
+    compile(name: 'p2pSDK', ext: 'aar')
+    compile project(':lib_externalstorage')
+    compile project(':react-native-camera')
+    compile project(':lib_jdbrecorder')
+    compile 'com.rrh.jdb:lib_selectorview:1.0.0'
+}
+
+apt {
+    arguments {
+        eventBusIndex "com.rrh.jdb.eventbus.JDBEventBusIndex"
+    }
+}
+
+dexKnife{
+    //必选参数:false,禁用分包插件
+    enabled true
+    //可选参数
+    //1.如果没有可选参数，将根据 enabled 决定是否分包。
+    //2.如果有可选参数，需满足必选参数和可选参数的条件才允许分包
+    //productFlavor 'debug'
+    buildType 'debug'
+
+    /*
+    *eg:当前 productFlavors = dev，buildType = debug，
+    *参数组合 1：enabled = true，productFlavor = dev，buildType = debug 分包
+    *参数组合 2：enabled = true，productFlavor = mock，buildType = debug 不分包
+    *参数组合 1：enabled = true，buildType = debug 所有 buildType = debug 分包
+    *参数组合 1：enabled = true，productFlavor = dev 所有 productFlavor = dev 分包
+    * */
+}
+//
+//project.afterEvaluate {
+//    long time1 = System.currentTimeMillis();
+//    String dependenciesList = "";
+//    configurations.getByName("compile").each { dependenciesList = dependenciesList + it + "\n" }
+//
+//    def detFile = file('proguard-dependencies-list.txt')
+//    def writer = new FileWriter(detFile)
+//    try {
+//        writer.write(dependenciesList)
+//        writer.flush()
+//    } finally {
+//        writer.close()
+//    }
+//
+//    project.javaexec {
+//        main = "-jar";
+//        args = ["proguard_gen.jar", "-o", "proguard-gen.txt", "-i", "proguard-dependencies-list.txt"]
+//    }
+//
+//    detFile.delete()
+//    println("\n===自动生成避混文件proguard-gen.txt耗时：" + (System.currentTimeMillis() - time1) + "ms===\n")
+//}
+
+
+
+
+
+
+
+
+
+
+
+
